@@ -135,7 +135,7 @@ export function PaymentDialog({ open, onOpenChange, payment, onClose }: any) {
           <form
             style={{ maxHeight: "80vh", overflowY: "auto" }}
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4"
+            className="space-y-6 p-4 sm:p-6 md:p-8 rounded-lg shadow-md grid grid-cols-1 md:grid-cols-2 gap-6"
           >
             {/* Contract ID */}
             <FormField

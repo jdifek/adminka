@@ -279,25 +279,30 @@ export function ContractDialog({ open, onOpenChange, contract, onClose, mutate }
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Car</FormLabel>
-                  <FormControl>
-                    <select
-                      style={{ color: "#333" }}
-                      {...field}
-                      className="input w-[70%]"
-                      value={field.value ?? ""}
-                      onChange={(e) => field.onChange(parseInt(e.target.value, 10) || "")}
-                    >
-                      <option value="" style={{ color: "#333" }}>
-                        Select Car
-                      </option>
-                      {cars.map((car: Car) => (
-                        <option key={car.id} value={car.id} style={{ color: "#333" }}>
-                          {`${car.brand} ${car.model} (${car.car_number})`}
-                          {car.is_available ? "🟢" : "🔴"}
-                        </option>
-                      ))}
-                    </select>
-                  </FormControl>
+                  <Select
+                    onValueChange={(value) => field.onChange(parseInt(value, 10) || "")}
+                    defaultValue={field.value?.toString()}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Car" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Array.isArray(cars) && cars.length > 0 ? (
+                        cars.map((car: Car) => (
+                          <SelectItem key={car.id} value={car.id.toString()}>
+                            {`${car.brand} ${car.model} (${car.car_number})`}{" "}
+                            {car.is_available ? "🟢 Available" : "🔴 Unavailable"}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem disabled value="none">
+                          No cars available
+                        </SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -309,7 +314,7 @@ export function ContractDialog({ open, onOpenChange, contract, onClose, mutate }
               name="client_name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Client Name</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="Enter client name" />
                   </FormControl>
@@ -322,7 +327,7 @@ export function ContractDialog({ open, onOpenChange, contract, onClose, mutate }
               name="client_surname"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Client Surname</FormLabel>
+                  <FormLabel>Surname</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="Enter client surname" />
                   </FormControl>
@@ -335,7 +340,7 @@ export function ContractDialog({ open, onOpenChange, contract, onClose, mutate }
               name="client_passport_number"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Client Passport Number</FormLabel>
+                  <FormLabel>Passport Number</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="Enter passport number" />
                   </FormControl>
@@ -348,7 +353,7 @@ export function ContractDialog({ open, onOpenChange, contract, onClose, mutate }
               name="client_phone_number"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Client Phone Number</FormLabel>
+                  <FormLabel>Phone</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="Enter phone number" />
                   </FormControl>
@@ -361,7 +366,7 @@ export function ContractDialog({ open, onOpenChange, contract, onClose, mutate }
               name="client_second_phone_number"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Client Second Phone Number (Optional)</FormLabel>
+                  <FormLabel>Second Phone</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="Enter second phone number" />
                   </FormControl>
@@ -407,61 +412,54 @@ export function ContractDialog({ open, onOpenChange, contract, onClose, mutate }
             />
             {/* Dropoff and Pickup Locations */}
             <FormField
-  control={form.control}
-  name="pickup_location_id"
-  render={({ field }) => (
-    <FormItem>
-      <FormLabel>Pickup Location</FormLabel>
-      <Select
-        onValueChange={(value) => field.onChange(Number(value))}
-        value={field.value?.toString()}
-      >
-        <FormControl>
-          <SelectTrigger>
-            <SelectValue placeholder="Select pickup location" />
-          </SelectTrigger>
-        </FormControl>
-        <SelectContent>
-          {location.map((el: Location) => (
-            <SelectItem key={el.id} value={el.id.toString()}>
-              {el.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <FormMessage />
-    </FormItem>
-  )}
-/>
+              control={form.control}
+              name="pickup_location_id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Pickup Location</FormLabel>
+                  <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value?.toString()}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select pickup location" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {location.map((el: Location) => (
+                        <SelectItem key={el.id} value={el.id.toString()}>
+                          {el.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-<FormField
-  control={form.control}
-  name="dropoff_location_id"
-  render={({ field }) => (
-    <FormItem>
-      <FormLabel>Dropoff Location</FormLabel>
-      <Select
-        onValueChange={(value) => field.onChange(Number(value))}
-        value={field.value?.toString()}
-      >
-        <FormControl>
-          <SelectTrigger>
-            <SelectValue placeholder="Select dropoff location" />
-          </SelectTrigger>
-        </FormControl>
-        <SelectContent>
-          {location.map((el: Location) => (
-            <SelectItem key={el.id} value={el.id.toString()}>
-              {el.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <FormMessage />
-    </FormItem>
-  )}
-/>
-
+            <FormField
+              control={form.control}
+              name="dropoff_location_id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Dropoff Location</FormLabel>
+                  <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value?.toString()}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select dropoff location" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {location.map((el: Location) => (
+                        <SelectItem key={el.id} value={el.id.toString()}>
+                          {el.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
@@ -631,30 +629,29 @@ export function ContractDialog({ open, onOpenChange, contract, onClose, mutate }
                 </FormItem>
               )}
             />
+<FormField
+  control={form.control}
+  name="status"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>Status</FormLabel>
+      <Select onValueChange={field.onChange} defaultValue={field.value || ""}>
+        <FormControl>
+          <SelectTrigger>
+            <SelectValue placeholder="Select status" />
+          </SelectTrigger>
+        </FormControl>
+        <SelectContent>
+          <SelectItem value="PENDING">Pending</SelectItem>
+          <SelectItem value="APPROVED">Approved</SelectItem>
+          <SelectItem value="COMPLETED">Completed</SelectItem>
+        </SelectContent>
+      </Select>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
 
-            <FormField
-              control={form.control}
-              name="status"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <FormControl>
-                    <select style={{ color: "#333" }} {...field} className="input" value={field.value || ""}>
-                      <option style={{ color: "#333" }} value="PENDING">
-                        Pending
-                      </option>
-                      <option style={{ color: "#333" }} value="APPROVED">
-                        Approved
-                      </option>
-                      <option style={{ color: "#333" }} value="COMPLETED">
-                        Completed
-                      </option>
-                    </select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
             {/* Final buttons */}
             <Button type="submit">{contract ? "Save Changes" : "Create Contract"}</Button>
