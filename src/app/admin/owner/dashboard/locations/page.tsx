@@ -19,8 +19,7 @@ function LocationsPage() {
   if (error) return <div>Failed to load locations</div>;
   if (!locations) return <div>Loading...</div>;
 
-  // Фильтрация данных для поиска
-  const filteredLocations = locations.filter((location: any) => {
+  const filteredLocations = (Array.isArray(locations) ? locations : []).filter((location: any) => {
     const searchQuery = searchTerm.toLowerCase();
 
     return Object.values(location).some((value) => {
@@ -28,6 +27,7 @@ function LocationsPage() {
       return value.toString().toLowerCase().includes(searchQuery);
     });
   });
+
 
   return (
     <div className="space-y-6">
